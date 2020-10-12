@@ -99,7 +99,7 @@ if __name__=="__main__":
     model_image ='testtu/' + str(x) + '.jpg'
     y=-1
     for i in range(1,37):
-        search_image='images/' + str(i) + '.jpg'
+        search_image='yuantuku/' + str(i) + '.jpg'
         threshold = 0.999
         flag=model_match(search_image, model_image, threshold)
         if flag==1:
