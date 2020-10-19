@@ -1,4 +1,2 @@
 # ZW
-AI这个文件夹里面存的是AI大比拼用的代码，使用方法：把这个文件夹下载下来用pycharm打开，在request.py和AIsuanf.py里面更改token，然后直接运行AIsuanf.py这个文件即可。
-puzzlegame这个文件夹里面存放的是游戏代码即原型设计实现代码
-showgame这个文件夹里面是游戏演示的视屏文件
+AI这个文件夹里面存的是AI大比拼用的代码，使用方法：把这个文件夹下载下来用pycharm打开，在request.py和AIsuanf.py里面更改token，然后直接运行AIsuanf.py这个文件即可。puzzlegame这个文件夹里面存放的是游戏代码即原型设计实现代码showgame这个文件夹里面是游戏演示的视屏文件
