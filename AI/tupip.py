@@ -6,7 +6,7 @@ import cv2
 from request import *
 from numpy import average, dot, linalg
 olderr = np.seterr(all='ignore')
-# 切图
+# 切割图片生成九张图块
 def cut_image(image):
     width, height = image.size
     item_width = int(width / 3)
@@ -19,13 +19,13 @@ def cut_image(image):
             box_list.append(box)
     image_list = [image.crop(box) for box in box_list]
     return image_list
-# 保存
+# 将切割好的图块保存到指定的文件夹
 def save_images(st,image_list):
     index = 1
     for image in image_list:
         image.save(st+str(index) + '.jpg')
         index += 1
-#找出9张中不是纯白色也不是纯黑色的图
+#计算图块的熵找出9张中不是纯白色也不是纯黑色的图(熵值较高）
 def shang(img):
     k = 0
     res = 0
@@ -44,11 +44,11 @@ def shang(img):
                 res = res
             else:
                 res = float(res - tmp[i] * (math.log(tmp[i]) / math.log(2.0)))
-    return res
+    return res#返回图块熵值
 #根据图像的一部分匹配图
 def model_match(search_image, model_image, threshold):
-    search_img = cv2.imread(search_image)
-    model_img_gray = cv2.imread(model_image, 0)#读取模板图片的灰度图
+    search_img = cv2.imread(search_image)#待匹配的原图
+    model_img_gray = cv2.imread(model_image, 0)#读取模板图片的灰度图（选出来的那张小图）
     search_img_gray = cv2.cvtColor(search_img, cv2.COLOR_BGR2GRAY)#将搜索图片转化为灰度图
     h, w = model_img_gray.shape
     res = cv2.matchTemplate(search_img_gray, model_img_gray, cv2.TM_CCOEFF_NORMED)#采用标准相关匹配 方法度量相似度
@@ -58,9 +58,9 @@ def model_match(search_image, model_image, threshold):
     flag=0
     for pt in zip(*loc):#zip(*loc)反解析为坐标值
         #print(pt)
-        flag=1
+        flag=1#能够在图像中找到
         #cv2.rectangle(search_img, pt[::-1], (pt[1] + w, pt[0] + h), (7,249,151), 2) #在搜索图片上绘制矩形框
-    return flag
+    return flag#若能在图像中找到这个图块则返回1，否则返回0
 # 将图片转化为RGB
 def make_regalur_image(img, size=(64, 64)):
     gray_image = img.resize(size).convert('RGB')
@@ -76,8 +76,7 @@ def calc_similar(li, ri):
     return calc_sim
 #if __name__=="__main__":
 def pipeitu():
-
-    #题目图片
+    #题目图片保存到test.jpg
     fh = open("test.jpg", "wb")
     fh.write(image_data)
     fh.close()
@@ -134,7 +133,7 @@ def pipeitu():
                 arr.append(j)
                 arr1[j-1]=1
                 break
-        if flag==0:
+        if flag==0:#白色块用0表示
             arr.append(0)
     #判断哪一块图被扣掉并生成目标序列
     target=[]
@@ -143,8 +142,6 @@ def pipeitu():
             target.append(i+1)
         else:
             target.append(0)
-
-
     print(arr)
     print(target)
     end_time = time()

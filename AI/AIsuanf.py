@@ -2,7 +2,7 @@
 import sys
 from request import *
 from tupip import *
-board=[]
+board=[]#记录前一个棋盘状态
 arr='0'
 step =0
 op=[]
@@ -43,7 +43,7 @@ def operation(x):#判断操作
     if x==3:
         return 's'
     if x==0:
-        return '0'
+        return '0'#开始标志
 def print_after(cache, far, num):  # print 后序
     if num == -1:
         return
@@ -100,8 +100,6 @@ def printf_before(cache2, far2, num):  # print 前序
         arr = str(arr) + operation(z)
     step += 1
     printf_before(cache2, far2, far2[num])
-
-
 def do_with(cache, cache2, far, l, r, l2, r2):#操作棋盘
     flag = 0
     t = cache[l]
@@ -148,18 +146,16 @@ def do_with_print(before, after):
     print(step - 1) # 减去一开始的状态不计算步数
     print(arr)
     print(op)
-
     print(an)
     headers = {'content-type': "application/json"}
     anserurl = "http://47.102.118.1:8089/api/challenge/submit"
     answer = {
-        # "uuid": "3f6b8193-d71c-4363-8e3e-b8c9739335aa",
         "uuid": uuid,
         "teamid": 41,
         "token": "38f216cd-c9fb-47ac-8075-c37f650c6892",
         "answer": {
-            "operations": arr,
-            "swap": []
+            "operations":arr,
+            "swap": swap
         }
     }
     print(answer)
@@ -171,18 +167,6 @@ def restore():
     global l, l2, r, r2,cache,cache2,far,far2
     while (l != r) and (l2 != r2):  # BFS，left == right表示队列为空
         flag = -1  # 保存中间接口状态的下标
-        # if step==stepre+1:
-        #     post1 = swap[0]-1
-        #     post2 = swap[1]-1
-        #     board[post1], board[post2] = board[post2], board[post1]
-        # if ((getreVersNum(board) + getPos(board)) % 2 != (getreVersNum(end) % 2 + getPos(end))):
-        #     print("无解")
-        #     break
-        #     post1 = 2
-        #     post2 = 3
-        #     board[post1], board[post2] = board[post2], board[post1]
-            # start = board
-            # cache = [start]
         cache, cache2, far, l, r, l2, r2, flag = do_with(cache, cache2, far, l, r, l2, r2)
         if flag:
             do_with_print(r - 1, flag)
@@ -192,8 +176,6 @@ def restore():
 if __name__=="__main__":
     global end,start,l,l2,r,r2,cache,cache2,far,far2
     board,end=pipeitu()
-    # board=[1, 2, 3, 9, 4, 6, 7, 0, 8]
-    # end=[1, 2, 3, 4, 0, 6, 7, 8, 9]
     start=board
     print(board)
     print(end)
@@ -204,6 +186,7 @@ if __name__=="__main__":
     cache = [start]
     cache2 = [end]
     restore()
+
 
 
 
